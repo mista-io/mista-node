@@ -1,9 +1,8 @@
 # Publishing
 
 1. Bump `version` in `package.json` and `src/version.ts`, and add a CHANGELOG entry.
-2. Make sure you are logged in to npm as a member of the `mista` organization (`npm whoami`).
-   If the `@mista` scope is not yours, rename the package to `@mista-io/sdk` in `package.json`
-   and the README before publishing.
+2. Log in to npm (`npm login`, check with `npm whoami`) as an owner of the `mista-sdk` package.
+   The first publish creates the package under your account.
 3. Publish (runs typecheck, tests and build first):
 
    ```bash

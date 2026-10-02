@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "paths": { "@mista/sdk": ["./src/index.ts"] },
+    "paths": { "mista-sdk": ["./src/index.ts"] },
     "lib": ["ES2022", "DOM"],
     "types": ["node"],
     "strict": true,

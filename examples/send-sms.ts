@@ -1,5 +1,5 @@
 // MISTA_API_TOKEN=... npx tsx examples/send-sms.ts 250780000001
-import { Mista } from "@mista/sdk";
+import { Mista } from "mista-sdk";
 
 const mista = new Mista();
 const to = process.argv[2];

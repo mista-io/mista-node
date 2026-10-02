@@ -1,4 +1,4 @@
-import { APIError, Mista } from "@mista/sdk";
+import { APIError, Mista } from "mista-sdk";
 
 const mista = new Mista();
 

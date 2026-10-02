@@ -4,7 +4,7 @@ Official Node.js / TypeScript client for the [Mista](https://mista.io) Messaging
 Full API reference: https://docs.mista.io
 
 ```bash
-npm install @mista/sdk
+npm install mista-sdk
 ```
 
 Requires Node.js 18 or newer. Zero runtime dependencies.
@@ -12,7 +12,7 @@ Requires Node.js 18 or newer. Zero runtime dependencies.
 ## Quickstart
 
 ```ts
-import { Mista } from "@mista/sdk";
+import { Mista } from "mista-sdk";
 
 const mista = new Mista({ token: process.env.MISTA_API_TOKEN });
 
@@ -26,7 +26,7 @@ console.log(message.uid, message.status);
 
 Get your API token in the dashboard under **Settings → API**. If you leave out `token`, the
 client reads the `MISTA_API_TOKEN` environment variable. CommonJS works too:
-`const { Mista } = require("@mista/sdk")`.
+`const { Mista } = require("mista-sdk")`.
 
 Request options are camelCase. Responses are returned exactly as the API sends them
 (snake_case), so every field matches the docs.
@@ -158,7 +158,7 @@ Every failure throws a subclass of `MistaError`:
 | `APIConnectionError` / `APITimeoutError` | network failure or timeout |
 
 ```ts
-import { ValidationError } from "@mista/sdk";
+import { ValidationError } from "mista-sdk";
 
 try {
   await mista.sms.send({ to: "123", senderId: "YourBrand", message: "Hi" });

@@ -1,4 +1,4 @@
-import { Mista } from "@mista/sdk";
+import { Mista } from "mista-sdk";
 
 const mista = new Mista();
 
