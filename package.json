@@ -1,0 +1,60 @@
+{
+  "name": "@mista/sdk",
+  "version": "0.1.0",
+  "description": "Official Node.js SDK for the Mista Messaging, Verify and Voice APIs",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke.mjs",
+    "compat": "node scripts/compat.mjs",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mista-io/mista-node.git"
+  },
+  "homepage": "https://docs.mista.io",
+  "bugs": {
+    "url": "https://github.com/mista-io/mista-node/issues"
+  },
+  "keywords": [
+    "mista",
+    "sms",
+    "bulk-sms",
+    "otp",
+    "verify",
+    "voice",
+    "rwanda",
+    "africa"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.3"
+  }
+}
