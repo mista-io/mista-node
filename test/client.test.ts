@@ -10,6 +10,7 @@ import {
   PermissionDeniedError,
   RateLimitError,
   ServerError,
+  VERSION,
   ValidationError,
 } from "../src";
 import { mockClient, ok } from "./helpers";
@@ -29,7 +30,7 @@ describe("client", () => {
     expect(calls[0]!.headers).toMatchObject({
       Authorization: "Bearer test-token",
       Accept: "application/json",
-      "User-Agent": "mista-node/0.1.0",
+      "User-Agent": `mista-node/${VERSION}`,
     });
     expect(calls[0]!.headers["Content-Type"]).toBeUndefined();
   });

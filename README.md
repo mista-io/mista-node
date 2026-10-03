@@ -44,8 +44,14 @@ const message = await mista.sms.send({
   type: "plain", // plain | unicode | voice | mms | whatsapp | viber | otp
 });
 
-const latest = await mista.logs.get(message.uid); // delivery status
+const latest = await mista.logs.get(message.uid);
+latest.status;        // "Queued" | "Sent" | "Delivered" | "Undelivered" | "Expired" | "Rejected" | "Failed"
+latest.status_detail; // why it failed, e.g. "Undelivered (handset unreachable)"; null otherwise
 ```
+
+`Queued` means the carrier has not accepted the message yet and `Sent` means it was accepted and
+is waiting for the handset's delivery report. The other five statuses are final. To be told when a
+message reaches one, register a [delivery report webhook](#delivery-report-webhooks) instead of polling.
 
 ## Campaigns
 
@@ -141,6 +147,50 @@ const calls = await mista.voice.calls.list({ filter: "missed", perPage: 20 });
 const call = await mista.voice.calls.get("call_uid");
 ```
 
+## Delivery report webhooks
+
+Mista POSTs a signed JSON event to your URL when a message is delivered (`message.delivered`) or
+fails (`message.failed`, with status Undelivered, Expired, Rejected or Failed).
+
+```ts
+const webhook = await mista.webhooks.set({ url: "https://example.com/webhooks/mista" });
+webhook.secret; // "whsec_..." - store it; you need it to verify requests
+
+await mista.webhooks.test();   // sends a signed webhook.test event now: { delivered, status_code, error }
+await mista.webhooks.get();
+await mista.webhooks.set({ url: "https://example.com/webhooks/mista", rotateSecret: true });
+await mista.webhooks.delete();
+```
+
+Verify every request with the **raw** body before trusting it:
+
+```ts
+import express from "express";
+import { verifyWebhook, WebhookVerificationError } from "mista-sdk";
+
+const app = express();
+
+app.post("/webhooks/mista", express.raw({ type: "application/json" }), (req, res) => {
+  try {
+    const event = verifyWebhook(req.body, req.header("Mista-Signature"), process.env.MISTA_WEBHOOK_SECRET!);
+    if (event.type === "message.delivered") {
+      // mark event.data.uid as delivered
+    } else if (event.type === "message.failed") {
+      // event.data.status is Undelivered | Expired | Rejected | Failed; reason in event.data.status_detail
+    }
+    res.sendStatus(200);
+  } catch (error) {
+    if (error instanceof WebhookVerificationError) return res.sendStatus(400);
+    throw error;
+  }
+});
+```
+
+`verifyWebhook` checks the HMAC-SHA256 signature and rejects events older than 5 minutes
+(`{ tolerance: seconds }` to change, `0` to disable). Answer with any 2xx within 10 seconds;
+otherwise Mista retries up to 5 more times over about 3 hours. Retries keep the same `event.id`, so
+use it to ignore duplicates. You can also register the URL in the dashboard under **Developers**.
+
 ## Errors
 
 Every failure throws a subclass of `MistaError`:
@@ -184,7 +234,7 @@ const mista = new Mista({ maxRetries: 2, timeout: 30_000 });
 
 ## Not covered
 
-Delivery-report webhooks (configure those in the dashboard) and the retired Push API.
+The retired Push API.
 
 ## Development
 

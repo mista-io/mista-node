@@ -6,6 +6,7 @@ import { Logs } from "./resources/logs";
 import { Sms } from "./resources/sms";
 import { Verify } from "./resources/verify";
 import { Voice } from "./resources/voice";
+import { Webhooks } from "./resources/webhooks";
 import { VERSION } from "./version";
 
 export const DEFAULT_BASE_URL = "https://api.mista.io";
@@ -23,7 +24,7 @@ export interface MistaOptions {
   fetch?: typeof fetch;
 }
 
-export type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface RequestOptions {
   method: HttpMethod;
@@ -46,6 +47,7 @@ export class Mista {
   readonly contacts: Contacts;
   readonly verify: Verify;
   readonly voice: Voice;
+  readonly webhooks: Webhooks;
 
   readonly baseUrl: string;
   readonly timeout: number;
@@ -80,6 +82,7 @@ export class Mista {
     this.contacts = new Contacts(this);
     this.verify = new Verify(this);
     this.voice = new Voice(this);
+    this.webhooks = new Webhooks(this);
   }
 
   /** Send a request and return the `data` field of the response envelope. */

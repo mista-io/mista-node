@@ -25,12 +25,27 @@ export interface SendSmsParams {
   dltTemplateId?: string;
 }
 
+/**
+ * Delivery status of a message. Delivered, Undelivered, Expired, Rejected and Failed are final.
+ * Queued: not yet accepted by the carrier. Sent: accepted, waiting for the handset delivery report.
+ */
+export type MessageStatus =
+  | "Queued"
+  | "Sent"
+  | "Delivered"
+  | "Undelivered"
+  | "Expired"
+  | "Rejected"
+  | "Failed";
+
 export interface SmsMessage {
   uid: string;
   to: string;
   from: string;
   message: string;
-  status: string;
+  status: MessageStatus;
+  /** Why the message failed, was undelivered, expired or was rejected; null otherwise. */
+  status_detail?: string | null;
   cost?: string | number;
   [key: string]: unknown;
 }
@@ -100,8 +115,7 @@ export interface ListMessagesParams {
   endDate?: string;
   /** Sender ID */
   from?: string;
-  /** Delivery status, e.g. "Delivered". */
-  status?: string;
+  status?: MessageStatus;
   smsType?: SmsType;
 }
 
@@ -189,6 +203,58 @@ export interface VerificationCheck {
   verified_at?: string | null;
   /** Why the check failed, e.g. "invalid_code" or "expired". */
   reason?: string;
+}
+
+// ----------------------------------------------------------- Webhooks
+
+export type WebhookEventType = "message.delivered" | "message.failed" | "webhook.test";
+
+/** The account's delivery report webhook registration. */
+export interface DeliveryReportWebhook {
+  url: string | null;
+  /** Signing secret (`whsec_...`) used to verify the `Mista-Signature` header. */
+  secret: string | null;
+  enabled: boolean;
+  events: WebhookEventType[];
+}
+
+export interface SetWebhookParams {
+  /** Public http(s) URL that accepts POST requests. */
+  url: string;
+  /** Issue a new signing secret. The old one stops working immediately. */
+  rotateSecret?: boolean;
+}
+
+export interface WebhookTestResult {
+  delivered: boolean;
+  /** HTTP status your endpoint answered with, or null if it could not be reached. */
+  status_code: number | null;
+  error: string | null;
+  event_id: string;
+}
+
+/** `data` of a delivery report event: the message in its final state. */
+export interface DeliveryReport {
+  uid: string;
+  to: string;
+  from: string;
+  status: MessageStatus;
+  status_detail: string | null;
+  cost: string;
+  sms_count: number;
+  /** Set when the message was part of a campaign. */
+  campaign_uid: string | null;
+  sent_at: string | null;
+  updated_at: string | null;
+}
+
+/** Body of a delivery report webhook request. */
+export interface WebhookEvent {
+  /** Unique per event and identical across retries; use it to ignore duplicates. */
+  id: string;
+  type: WebhookEventType;
+  created_at: string;
+  data: DeliveryReport;
 }
 
 // -------------------------------------------------------------- Voice
