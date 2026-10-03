@@ -1,6 +1,6 @@
 {
   "name": "mista-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Official Node.js SDK for the Mista Messaging, Verify and Voice APIs",
   "license": "MIT",
   "type": "module",
