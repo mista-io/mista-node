@@ -2,7 +2,7 @@ import { Mista } from "mista-sdk";
 
 const mista = new Mista();
 
-const verification = await mista.verify.start({ to: "+250780000001", channel: "sms" });
+const verification = await mista.verify.start({ to: "+1555***4567", channel: "sms" });
 console.log("Code sent, sid", verification.sid);
 
 // Later, with the code the user typed:

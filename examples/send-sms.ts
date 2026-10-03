@@ -1,4 +1,4 @@
-// MISTA_API_TOKEN=... npx tsx examples/send-sms.ts 250780000001
+// MISTA_API_TOKEN=... npx tsx examples/send-sms.ts "+1555***4567"
 import { Mista } from "mista-sdk";
 
 const mista = new Mista();

@@ -17,7 +17,7 @@ import { Mista } from "mista-sdk";
 const mista = new Mista({ token: process.env.MISTA_API_TOKEN });
 
 const message = await mista.sms.send({
-  to: "250780000001",
+  to: "+1555***4567",
   senderId: "YourBrand",
   message: "Your order has shipped",
 });
@@ -38,7 +38,7 @@ send, use a campaign.
 
 ```ts
 const message = await mista.sms.send({
-  to: "250780000001",
+  to: "+1555***4567",
   senderId: "YourBrand",
   message: "Hello",
   type: "plain", // plain | unicode | voice | mms | whatsapp | viber | otp
@@ -59,7 +59,7 @@ message reaches one, register a [delivery report webhook](#delivery-report-webho
 // Broadcast: one message, up to 10,000 numbers
 await mista.campaigns.bulk({
   senderId: "LOYALTY",
-  recipients: ["250780000001", "250780000002"],
+  recipients: ["+1555***4567", "+1555***7890"],
   message: "Double points this weekend!",
   scheduleTime: "2026-12-24 09:00", // or a Date; account timezone
 });
@@ -68,8 +68,8 @@ await mista.campaigns.bulk({
 await mista.campaigns.bulk({
   senderId: "LOYALTY",
   recipients: [
-    { to: "250780000001", message: "Hi Alice, you have 120 points." },
-    { to: "250780000002", message: "Hi Bob, you have 45 points." },
+    { to: "+1555***4567", message: "Hi Alice, you have 120 points." },
+    { to: "+1555***7890", message: "Hi Bob, you have 45 points." },
   ],
 });
 
@@ -110,14 +110,14 @@ await mista.contactGroups.get(group.uid);
 await mista.contactGroups.update(group.uid, "Developers KGL");
 
 const contact = await mista.contacts.create(group.uid, {
-  phone: "250780000001",
+  phone: "+1555***4567",
   firstName: "Alice",
   lastName: "Uwase",
   fields: { CITY: "Kigali" }, // custom fields, keyed by the group's field tag
 });
 await mista.contacts.list(group.uid);
 await mista.contacts.get(group.uid, contact.uid);
-await mista.contacts.update(group.uid, contact.uid, { phone: "250780000001", firstName: "Alicia" });
+await mista.contacts.update(group.uid, contact.uid, { phone: "+1555***4567", firstName: "Alicia" });
 await mista.contacts.delete(group.uid, contact.uid);
 
 await mista.contactGroups.delete(group.uid); // also deletes its contacts
@@ -126,7 +126,7 @@ await mista.contactGroups.delete(group.uid); // also deletes its contacts
 ## Verify (OTP)
 
 ```ts
-const { sid } = await mista.verify.start({ to: "+250780000001", channel: "sms" });
+const { sid } = await mista.verify.start({ to: "+1555***4567", channel: "sms" });
 
 const result = await mista.verify.check({ sid, code: "123456" });
 if (result.verified) {

@@ -6,7 +6,7 @@ const group = await mista.contactGroups.create("Developers");
 
 try {
   const contact = await mista.contacts.create(group.uid, {
-    phone: "250780000001",
+    phone: "+1555***4567",
     firstName: "Alice",
     lastName: "Uwase",
   });

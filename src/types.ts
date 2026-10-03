@@ -11,7 +11,7 @@ export type ScheduleTime = string | Date;
 // ---------------------------------------------------------------- SMS
 
 export interface SendSmsParams {
-  /** One phone number in international format, e.g. "250780000001". */
+  /** One phone number in international format, e.g. "+1555***4567". */
   to: string;
   senderId: string;
   message: string;
